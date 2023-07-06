@@ -1,0 +1,30 @@
+{
+  "name": "nodejs-file-manager",
+  "version": "1.0.0",
+  "description": "file-manager",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "name": "nodemon  src/index.js -- --username=Name",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ullltimate/nodejs-file-manager.git"
+  },
+  "keywords": [
+    "file-manager"
+  ],
+  "author": "ullltimate",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ullltimate/nodejs-file-manager/issues"
+  },
+  "homepage": "https://github.com/ullltimate/nodejs-file-manager#readme",
+  "devDependencies": {
+    "prettier": "^2.8.7"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

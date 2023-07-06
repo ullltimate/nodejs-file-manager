@@ -1,5 +1,6 @@
 import process from 'node:process';
 import { stdin, stdout } from 'node:process';
+import { cwd } from 'node:process';
 
 let userName;
 
@@ -24,17 +25,16 @@ const greeting = async () => {
 };
 
 const linstenerConsole = async () => {
-    stdout.write('Writing your command:\n');
+    stdout.write(`You are currently in ${cwd()}\n`);
 
     stdin.on('data', data => {
         
         if (data.toString().trim() == 'exit'){
             process.exit();
         }
-        process.on('SIGINT', () => process.exit());
     });
-
-    process.on('exit', () => stdout.write(`Thank you for using File Manager, ${userName}, goodbye!\n`));
+    process.on('SIGINT', () => process.exit());
+    process.on('exit', () => stdout.write(`\nThank you for using File Manager, ${userName}, goodbye!\n`));
 }
 
 await appFileManager();

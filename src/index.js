@@ -1,7 +1,8 @@
 import process from 'node:process';
 import { stdin, stdout } from 'node:process';
 import { cwd } from 'node:process';
-import { homedir } from 'node:os';
+import fs from 'fs/promises';
+import { statSync } from 'node:fs';
 
 let userName;
 
@@ -41,11 +42,14 @@ const linstenerConsole = async () => {
                     cd(data.toString().split(' ')[1].trim());
                 }
                 break;
+            case 'ls':
+                ls();
+                break;
             case 'exit':
                 process.exit();
             default:
                 console.log('Please add correct command');
-            }
+        }
         //if (data.toString().trim() === 'up'){
         //    up();
         //}
@@ -69,4 +73,30 @@ const cd = async (path) =>{
         console.error(new Error(`Operation failed`));
     }
 }
+
+const ls = async () => {
+    let path = cwd();
+    let files;
+    try {
+        files = await fs.readdir(path);
+    } catch (error) {
+        console.error(new Error(`Operation failed`));
+    }
+    const finalTable = files.map((elem) => new Table(elem));
+    console.table(finalTable);
+}
+
+function Table(name){
+    this.Name = name;
+    this.Type = isFile(name) ? 'file' : isDirectory(name) ? 'directory' : 'unknow';
+}
+
+function isDirectory(path){
+   return statSync(path).isDirectory();
+}
+
+function isFile(path){
+    return statSync(path).isFile();
+}
+
 await appFileManager();

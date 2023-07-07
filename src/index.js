@@ -61,6 +61,13 @@ const linstenerConsole = async () => {
                     add(data.toString().split(' ')[1].trim());
                 }
                 break;
+            case 'rn':
+                if(!data.toString().split(' ')[1].trim() || !data.toString().split(' ')[2].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    rn(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
+                }
+                break;
             case 'exit':
                 process.exit();
             default:
@@ -124,7 +131,17 @@ const add = async (nameFile) => {
     try {
         await fs.writeFile(nameFile, '');
     } catch (error) {
-        console.error(error);
+        console.error(new Error(`Operation failed`));
     }
 }
+
+const rn = async (nameFile, newName) => {
+    const path = `${cwd()}${sep}${nameFile}`
+    try {
+        await fs.rename(path, newName);
+    } catch (error) {
+        console.error(new Error(`Operation failed`));
+    }
+}
+
 await appFileManager();

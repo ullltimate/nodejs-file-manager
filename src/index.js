@@ -50,12 +50,6 @@ const linstenerConsole = async () => {
             default:
                 console.log('Please add correct command');
         }
-        //if (data.toString().trim() === 'up'){
-        //    up();
-        //}
-        //if (data.toString().trim() === 'exit'){
-        //    process.exit();
-        //}
         stdout.write(`You are currently in ${cwd()}\n`);
         console.log();
     });

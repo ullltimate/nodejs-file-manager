@@ -6,6 +6,7 @@ import { statSync } from 'node:fs';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { sep } from 'node:path';
 import os from 'node:os';
+import { createHash } from 'node:crypto';
 
 let userName;
 
@@ -95,6 +96,13 @@ const linstenerConsole = async () => {
                     console.log('Please add correct command');
                 } else{
                     osInfo(data.toString().split(' ')[1].trim());
+                }
+                break;
+            case 'hash':
+                if(!data.toString().split(' ')[1].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    hash(data.toString().split(' ')[1].trim());
                 }
                 break;
             case 'exit':
@@ -212,6 +220,13 @@ const osInfo = (command) => {
         default:
             console.log('Please add correct command');
     }
+}
+
+const hash = async (path) => {
+    const hash = createHash('sha256');
+    const data = await fs.readFile(path, {encoding: 'utf8'})
+    hash.update(data);
+    console.log(hash.digest('hex'));
 }
 
 await appFileManager();

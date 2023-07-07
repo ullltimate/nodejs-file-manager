@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import { statSync } from 'node:fs';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { sep } from 'node:path';
+import os from 'node:os';
 
 let userName;
 
@@ -88,7 +89,14 @@ const linstenerConsole = async () => {
                 } else{
                     mv(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
                 }
-                break;   
+                break;
+            case 'os':
+                if(!data.toString().split(' ')[1].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    osInfo(data.toString().split(' ')[1].trim());
+                }
+                break;
             case 'exit':
                 process.exit();
             default:
@@ -182,6 +190,28 @@ const rm = async (path) => {
 const mv = (pathToFile, pathToNewDir) => {
     cp(pathToFile, pathToNewDir);
     rm(pathToFile);
+}
+
+const osInfo = (command) => {
+    switch(command){
+        case '--EOL':
+            console.log(os.EOL);
+            break;
+        case '--cpus':
+            console.log(os.cpus());
+            break;
+        case '--homedir':
+            console.log(os.homedir());
+            break;
+        case '--username':
+            console.log(os.userInfo().username)
+            break;
+        case '--architecture':
+            console.log(os.arch());
+            break;
+        default:
+            console.log('Please add correct command');
+    }
 }
 
 await appFileManager();

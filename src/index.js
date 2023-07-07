@@ -3,7 +3,7 @@ import { stdin, stdout } from 'node:process';
 import { cwd } from 'node:process';
 import fs from 'fs/promises';
 import { statSync } from 'node:fs';
-import { createReadStream } from 'node:fs';
+import { createReadStream, createWriteStream } from 'node:fs';
 import { sep } from 'node:path';
 
 let userName;
@@ -68,6 +68,27 @@ const linstenerConsole = async () => {
                     rn(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
                 }
                 break;
+            case 'cp':
+                if(!data.toString().split(' ')[1].trim() || !data.toString().split(' ')[2].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    cp(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
+                }
+                break;
+            case 'rm':
+                if(!data.toString().split(' ')[1].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    rm(data.toString().split(' ')[1].trim());
+                }
+                break;
+            case 'mv':
+                if(!data.toString().split(' ')[1].trim() || !data.toString().split(' ')[2].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    mv(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
+                }
+                break;   
             case 'exit':
                 process.exit();
             default:
@@ -142,6 +163,25 @@ const rn = async (nameFile, newName) => {
     } catch (error) {
         console.error(new Error(`Operation failed`));
     }
+}
+
+const cp = (pathToFile, pathToNewDir) => {
+    const readStream = createReadStream(pathToFile, 'utf-8');
+    const writeStream = createWriteStream(pathToNewDir, 'utf-8')
+    readStream.pipe(writeStream);
+}
+
+const rm = async (path) => {
+    try {
+        await fs.unlink(path);
+    } catch (error) {
+        console.error(new Error(`Operation failed`));
+    }
+}
+
+const mv = (pathToFile, pathToNewDir) => {
+    cp(pathToFile, pathToNewDir);
+    rm(pathToFile);
 }
 
 await appFileManager();

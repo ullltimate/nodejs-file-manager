@@ -82,7 +82,7 @@ const ls = async () => {
     } catch (error) {
         console.error(new Error(`Operation failed`));
     }
-    const finalTable = files.map((elem) => new Table(elem));
+    const finalTable = sortFiles(files).map((elem) => new Table(elem));
     console.table(finalTable);
 }
 
@@ -97,6 +97,12 @@ function isDirectory(path){
 
 function isFile(path){
     return statSync(path).isFile();
+}
+
+function sortFiles(files){
+    const onlyFolders = files.filter((el) => isDirectory(el));
+    const onlyFiles = files.filter((el) => isFile(el));
+    return onlyFolders.concat(onlyFiles);
 }
 
 await appFileManager();

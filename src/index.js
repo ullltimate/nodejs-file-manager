@@ -4,6 +4,7 @@ import { cwd } from 'node:process';
 import fs from 'fs/promises';
 import { statSync } from 'node:fs';
 import { createReadStream } from 'node:fs';
+import { sep } from 'node:path';
 
 let userName;
 
@@ -51,6 +52,13 @@ const linstenerConsole = async () => {
                     console.log('Please add correct command');
                 } else{
                     cat(data.toString().split(' ')[1].trim());
+                }
+                break;
+            case 'add':
+                if(!data.toString().split(' ')[1].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    add(data.toString().split(' ')[1].trim());
                 }
                 break;
             case 'exit':
@@ -112,4 +120,11 @@ const cat = (path) => {
     readStream.pipe(stdout);
 }
 
+const add = async (nameFile) => {
+    try {
+        await fs.writeFile(nameFile, '');
+    } catch (error) {
+        console.error(error);
+    }
+}
 await appFileManager();

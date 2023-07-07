@@ -3,6 +3,7 @@ import { stdin, stdout } from 'node:process';
 import { cwd } from 'node:process';
 import fs from 'fs/promises';
 import { statSync } from 'node:fs';
+import { createReadStream } from 'node:fs';
 
 let userName;
 
@@ -44,6 +45,13 @@ const linstenerConsole = async () => {
                 break;
             case 'ls':
                 ls();
+                break;
+            case 'cat':
+                if(!data.toString().split(' ')[1].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    cat(data.toString().split(' ')[1].trim());
+                }
                 break;
             case 'exit':
                 process.exit();
@@ -97,6 +105,11 @@ function sortFiles(files){
     const onlyFolders = files.filter((el) => isDirectory(el));
     const onlyFiles = files.filter((el) => isFile(el));
     return onlyFolders.concat(onlyFiles);
+}
+
+const cat = (path) => {
+    const readStream = createReadStream(path);
+    readStream.pipe(stdout);
 }
 
 await appFileManager();

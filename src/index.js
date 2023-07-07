@@ -1,12 +1,12 @@
 import process from 'node:process';
-import { stdin, stdout } from 'node:process';
-import { cwd } from 'node:process';
+import { stdin, stdout, cwd } from 'node:process';
 import fs from 'fs/promises';
-import { statSync } from 'node:fs';
-import { createReadStream, createWriteStream } from 'node:fs';
+import { statSync, createReadStream, createWriteStream } from 'node:fs';
 import { sep } from 'node:path';
 import os from 'node:os';
 import { createHash } from 'node:crypto';
+import { pipeline } from 'node:stream/promises';
+import { createBrotliCompress, createBrotliDecompress } from 'node:zlib';
 
 let userName;
 
@@ -103,6 +103,20 @@ const linstenerConsole = async () => {
                     console.log('Please add correct command');
                 } else{
                     hash(data.toString().split(' ')[1].trim());
+                }
+                break;
+            case 'compress':
+                if(!data.toString().split(' ')[1].trim() || !data.toString().split(' ')[2].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    compress(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
+                }
+                break;
+            case 'decompress':
+                if(!data.toString().split(' ')[1].trim() || !data.toString().split(' ')[2].trim()){
+                    console.log('Please add correct command');
+                } else{
+                    decompress(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
                 }
                 break;
             case 'exit':
@@ -227,6 +241,26 @@ const hash = async (path) => {
     const data = await fs.readFile(path, {encoding: 'utf8'})
     hash.update(data);
     console.log(hash.digest('hex'));
+}
+
+const compress = async (pathFile, pathDestination) => {
+    const readStream = createReadStream(pathFile);
+    const writeSream = createWriteStream(pathDestination);
+    try {
+        await pipeline(readStream, createBrotliCompress(), writeSream,);
+    } catch(err){
+        console.error(new Error(`Operation failed`));
+    }
+}
+
+const decompress = async (pathFile, pathDestination) => {
+    const readStream = createReadStream(pathFile);
+    const writeSream = createWriteStream(pathDestination);
+    try {
+        await pipeline(readStream, createBrotliDecompress(), writeSream,);
+    } catch(err){
+        console.error(new Error(`Operation failed`));
+    }
 }
 
 await appFileManager();

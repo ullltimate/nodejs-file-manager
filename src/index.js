@@ -119,7 +119,7 @@ const linstenerConsole = async () => {
                     decompress(data.toString().split(' ')[1].trim(), data.toString().split(' ')[2].trim());
                 }
                 break;
-            case 'exit':
+            case '.exit':
                 process.exit();
             default:
                 console.log('Please add correct command');
